@@ -6,21 +6,26 @@ const movieModel = require('./movie-model.js');
 const app = express();
 
 app.use(bodyParser.json()); 
-
-// Statische Dateien (HTML, CSS, JS) aus dem Ordner 'files' servieren
 app.use(express.static(path.join(__dirname, 'files')));
 
-// Task 1.2: Alle Filme als Array zurückgeben
+// GET ALL MOVIES
 app.get('/movies', function (req, res) {
-  const moviesArray = Object.values(movieModel);
-  res.json(moviesArray); // Das hier schickt die Daten an den Browser!
+  res.json(Object.values(movieModel));
 });
 
-// Task 2.1: Platzhalter für einen einzelnen Film (noch auf 404)
+// Task 2.1: GET SINGLE MOVIE
 app.get('/movies/:imdbID', function (req, res) {
-  res.sendStatus(404);
+  const id = req.params.imdbID; // Liest die ID aus der URL
+  const movie = movieModel[id]; // Sucht im Objekt aus movie-model.js
+
+  if (movie) {
+    res.json(movie); // Gefunden -> Daten senden
+  } else {
+    res.sendStatus(404); // Nicht gefunden -> Fehler senden
+  }
 });
+
+/* Task 3 (Speichern) folgt später */
 
 app.listen(3000);
-
 console.log("Server now listening on http://localhost:3000/");
