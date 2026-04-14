@@ -5,32 +5,22 @@ const movieModel = require('./movie-model.js');
 
 const app = express();
 
-// Parse urlencoded bodies
 app.use(bodyParser.json()); 
 
-// Serve static content in directory 'files'
+// Statische Dateien (HTML, CSS, JS) aus dem Ordner 'files' servieren
 app.use(express.static(path.join(__dirname, 'files')));
 
-// Configure a 'get' endpoint for all movies..
+// Task 1.2: Alle Filme als Array zurückgeben
 app.get('/movies', function (req, res) {
-  /* Task 1.2. Remove the line below and eturn the movies from 
-     the model as an array */
-  res.sendStatus(404)
-})
+  const moviesArray = Object.values(movieModel);
+  res.json(moviesArray); // Das hier schickt die Daten an den Browser!
+});
 
-// Configure a 'get' endpoint for a specific movie
+// Task 2.1: Platzhalter für einen einzelnen Film (noch auf 404)
 app.get('/movies/:imdbID', function (req, res) {
-  /* Task 2.1. Remove the line below and add the 
-    functionality here */
-  res.sendStatus(404)
-})
+  res.sendStatus(404);
+});
 
-/* Task 3.1 and 3.2.
-   - Add a new PUT endpoint
-   - Check whether the movie sent by the client already exists 
-     and continue as described in the assignment */
+app.listen(3000);
 
-app.listen(3000)
-
-console.log("Server now listening on http://localhost:3000/")
-
+console.log("Server now listening on http://localhost:3000/");
