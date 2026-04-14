@@ -6,26 +6,37 @@ const movieModel = require('./movie-model.js');
 const app = express();
 
 app.use(bodyParser.json()); 
+
 app.use(express.static(path.join(__dirname, 'files')));
 
-// GET ALL MOVIES
 app.get('/movies', function (req, res) {
   res.json(Object.values(movieModel));
 });
 
-// Task 2.1: GET SINGLE MOVIE
 app.get('/movies/:imdbID', function (req, res) {
-  const id = req.params.imdbID; // Liest die ID aus der URL
-  const movie = movieModel[id]; // Sucht im Objekt aus movie-model.js
-
+  const id = req.params.imdbID;
+  const movie = movieModel[id];
   if (movie) {
-    res.json(movie); // Gefunden -> Daten senden
+    res.json(movie);
   } else {
-    res.sendStatus(404); // Nicht gefunden -> Fehler senden
+    res.sendStatus(404);
   }
 });
 
-/* Task 3 (Speichern) folgt später */
+app.put('/movies/:imdbID', function (req, res) {
+  const id = req.params.imdbID;
+  const updatedMovie = req.body; 
+
+  const exists = !!movieModel[id];
+
+  movieModel[id] = updatedMovie;
+
+  if (exists) {
+    res.sendStatus(200);
+  } else {
+    res.status(201).send(updatedMovie);
+  }
+});
 
 app.listen(3000);
 console.log("Server now listening on http://localhost:3000/");
